@@ -6,6 +6,7 @@ import Messages from "../components/Messages";
 import ShowInstructorDetails from "../components/ShowInstructorDetails";
 import ShowUserDetails from "../components/ShowUserDetails"; // ✅ Import ShowUserDetails
 import AddUser from "../components/AddUser";
+import AddUserBtn from "../components/AddUserBtn";
 
 function Admin({ userData }) {
   const [showInstructorDetails, setShowInstructorDetails] = useState(false);
@@ -34,7 +35,7 @@ function Admin({ userData }) {
       ) : isAddUser ? (
         <AddUser />
       ) : (
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-wrap">
           <div>
             <h2 className="text-4xl font-bold">Users:</h2>
             <div className="p-2">
@@ -65,6 +66,12 @@ function Admin({ userData }) {
                 handleShowInstructorDetails={handleShowInstructorDetails}
               />
             </div>
+          </div>
+          <div>
+            <h2 className="text-4xl font-bold">
+              Admin
+              <AddUserBtn setIsAddUser={setIsAddUser} />
+            </h2>
           </div>
         </div>
       )}
