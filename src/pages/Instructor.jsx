@@ -34,30 +34,19 @@ function Instructor({ userData }) {
     // 🔹 Fetch all unique group names from Supabase
     async function fetchGroups() {
       const { data, error } = await supabase
-        .from("Users")
-        .select("courses")
-        .not("courses", "is", null);
+        .from("Instructor")
+        .select("groups")
+        .eq("id", userData.id);
 
       if (error) {
         console.error("Error fetching groups:", error);
         return;
       }
 
-      // Extract groups from JSON objects
-      const uniqueGroups = new Set();
+      console.dir(data);
 
-      data.forEach((item) => {
-        const courses = item.courses;
-        if (courses && typeof courses === "object") {
-          Object.values(courses).forEach((course) => {
-            if (course.group) {
-              uniqueGroups.add(course.group);
-            }
-          });
-        }
-      });
-
-      setGroupList([...uniqueGroups]);
+      const groups = JSON.parse(data[0]["groups"].replace(/'/g, '"'));
+      setGroupList(groups);
     }
 
     // 🔹 Fetch instructor sessions from Supabase
