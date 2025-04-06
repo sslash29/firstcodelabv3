@@ -53,10 +53,10 @@ function LogIn({ setUserData }) {
     }
 
     setUserData(userData);
-
-    if (userData.type === "student") navigate("/user");
-    if (userData.type === "instructor") navigate("/instructor");
-    if (userData.type === "admin") navigate("/admin");
+    console.log(userData);
+    if (userData.type.toLowerCase() === "student") navigate("/user");
+    if (userData.type.toLowerCase() === "instructor") navigate("/instructor");
+    if (userData.type.toLowerCase() === "admin") navigate("/admin");
   }
 
   return (
