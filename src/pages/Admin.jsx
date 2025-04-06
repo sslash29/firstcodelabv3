@@ -7,6 +7,8 @@ import ShowInstructorDetails from "../components/ShowInstructorDetails";
 import ShowUserDetails from "../components/ShowUserDetails"; // ✅ Import ShowUserDetails
 import AddUser from "../components/AddUser";
 import AddUserBtn from "../components/AddUserBtn";
+import { GroupContext } from "../context/GroupContext";
+import Groups from "../components/Groups";
 
 function Admin({ userData }) {
   const [showInstructorDetails, setShowInstructorDetails] = useState(false);
@@ -15,6 +17,7 @@ function Admin({ userData }) {
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [isAddUser, setIsAddUser] = useState(false);
   const { studentList, instructors } = useContext(UsersContext);
+  const { groupList } = useContext(GroupContext);
 
   const handleShowInstructorDetails = (instructorDetails) => {
     setShowInstructorDetails(true);
@@ -72,6 +75,10 @@ function Admin({ userData }) {
               Admin
               <AddUserBtn setIsAddUser={setIsAddUser} />
             </h2>
+          </div>
+          <div>
+            <h2 className="text-4xl font-bold">Groups:</h2>
+            <Groups groupList={groupList} />
           </div>
         </div>
       )}

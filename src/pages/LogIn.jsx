@@ -48,7 +48,7 @@ function LogIn({ setUserData }) {
 
     if (!userData) {
       console.log("User not found or incorrect password");
-      setIsError("Invalid credentials");
+      setIsError(null);
       return;
     }
 
