@@ -6,40 +6,44 @@ const GroupContext = createContext(null);
 function GroupProvider({ children }) {
   const [filteredGroups, setFilteredGroups] = useState([]); // For autocomplete
   const [groupList, setGroupList] = useState([]); // Store fetched groups
+  const [mounted, setMounted] = useState(false); // Add state to track mount status
+
+  console.log("context is running");
+
   useEffect(() => {
+    console.log("useEffect is running");
+
+    setMounted(true); // Set mounted state to true when the effect runs
+
     async function fetchGroups() {
+      console.log("function is running");
+
       const { data, error } = await supabase
-        .from("Users")
-        .select("courses")
-        .not("courses", "is", null);
+        .from("Group_users")
+        .select("*, Group(*),Users(*),Instructor(*)"); // Explicitly reference Group_1 for the name field
 
       if (error) {
         console.error("Error fetching groups:", error);
         return;
       }
 
-      // Extract groups from JSON objects
-      const uniqueGroups = new Set();
-
-      data.forEach((item) => {
-        const courses = item.courses;
-        if (courses && typeof courses === "object") {
-          Object.values(courses).forEach((course) => {
-            if (course.group) {
-              uniqueGroups.add(course.group);
-            }
-          });
-        }
-      });
-
-      setGroupList([...uniqueGroups]);
+      console.log("Fetched Data:", data); // Add this line to inspect the data directly
+      // Map over the data to extract the group names
+      const uniqueGroups = Array.from(new Set(data.map((group) => group)));
+      setGroupList(uniqueGroups); // Set the group list without duplicates
+      console.log(groupList);
     }
+
     fetchGroups();
-  }, []);
+  }, []); // Empty dependency array to run once when the component is mounted
+
+  // if (!mounted) {
+  //   return <div>Loading...</div>; // Render loading state if not yet mounted
+  // }
 
   return (
     <GroupContext.Provider
-      value={{ filteredGroups, setFilteredGroups, groupList, setGroupList }}
+      value={{ setFilteredGroups, groupList, setGroupList, filteredGroups }}
     >
       {children}
     </GroupContext.Provider>

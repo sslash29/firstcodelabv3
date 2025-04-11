@@ -42,6 +42,10 @@ function LogIn({ setUserData }) {
 
       if (password === data.password) {
         userData = data;
+
+        // Save to localStorage
+        localStorage.setItem("userData", JSON.stringify(userData));
+
         break;
       }
     }
