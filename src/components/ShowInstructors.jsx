@@ -4,7 +4,6 @@ function ShowInstructors({ instructors = [], onClickFunc, setIsAddUser }) {
   return (
     <div>
       {instructors?.map((ins, n) => {
-        console.log(ins);
         return (
           <button
             key={n}

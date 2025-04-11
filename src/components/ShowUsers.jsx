@@ -1,7 +1,6 @@
 import AddUserBtn from "./AddUserBtn";
 
 function ShowUsers({ users = [], onClickFunc, flex, gap, setIsAddUser }) {
-  console.dir(users);
   return (
     <div
       className={`${flex ? "flex flex-col" : ""} ${gap ? `gap-${gap}` : ""}`}

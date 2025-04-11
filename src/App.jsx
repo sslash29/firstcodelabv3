@@ -11,7 +11,10 @@ import { GroupProvider } from "./context/GroupContext";
 import { UsersProvider } from "./context/UsersContext";
 
 function App() {
-  const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState(() => {
+    const storedData = localStorage.getItem("userData");
+    return storedData ? JSON.parse(storedData) : "";
+  });
 
   return (
     <GroupProvider>

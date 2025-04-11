@@ -9,15 +9,17 @@ import AddUser from "../components/AddUser";
 import AddUserBtn from "../components/AddUserBtn";
 import { GroupContext } from "../context/GroupContext";
 import Groups from "../components/Groups";
+import ShowGroupData from "../components/ShowGroupData";
 
 function Admin({ userData }) {
   const [showInstructorDetails, setShowInstructorDetails] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedInstructor, setSelectedInstructor] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState(null);
   const [isAddUser, setIsAddUser] = useState(false);
+  const [isShowGroup, setIsShowGroup] = useState(false);
   const { studentList, instructors } = useContext(UsersContext);
-  const { groupList } = useContext(GroupContext);
 
   const handleShowInstructorDetails = (instructorDetails) => {
     setShowInstructorDetails(true);
@@ -29,6 +31,11 @@ function Admin({ userData }) {
     setSelectedUser(userDetails);
   };
 
+  const handleShowGroupDetails = (groupDetails) => {
+    setIsShowGroup(true);
+    setSelectedGroup(groupDetails);
+  };
+
   return (
     <div>
       {showInstructorDetails ? (
@@ -37,6 +44,14 @@ function Admin({ userData }) {
         <ShowUserDetails userDetails={selectedUser} />
       ) : isAddUser ? (
         <AddUser />
+      ) : isShowGroup ? (
+        <ShowGroupData
+          group_data={selectedGroup}
+          setUserDetails={setSelectedUser}
+          showUserDetails={setShowUserDetails}
+          setShowInstructorDetails={setShowInstructorDetails}
+          setInstrcutorDetails={setSelectedInstructor}
+        />
       ) : (
         <div className="flex justify-between flex-wrap">
           <div>
@@ -78,7 +93,7 @@ function Admin({ userData }) {
           </div>
           <div>
             <h2 className="text-4xl font-bold">Groups:</h2>
-            <Groups groupList={groupList} />
+            <Groups handleShowGroupDetails={handleShowGroupDetails} />
           </div>
         </div>
       )}
