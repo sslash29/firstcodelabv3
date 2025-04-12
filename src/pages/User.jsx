@@ -3,6 +3,7 @@ import ShowCourses from "../components/ShowCourses";
 import ShowHomework from "../components/ShowHomework";
 import ShowRateInstructor from "../components/ShowRateInstructor";
 import { UsersContext } from "../context/UsersContext";
+import ShowSessions from "../components/ShowSessions";
 
 function User({ userData }) {
   const courses = userData.courses ? Object.keys(userData.courses) : [];
@@ -39,6 +40,7 @@ function User({ userData }) {
       <ShowCourses courses={courses} />
       <ShowHomework group={groups} />
       <ShowRateInstructor instructors={instructors} userData={userData} />
+      <ShowSessions courses={userData.courses} />
     </div>
   );
 }
