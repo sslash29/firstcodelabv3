@@ -9,7 +9,6 @@ import Admin from "./pages/Admin";
 import { useState } from "react";
 import { GroupProvider } from "./context/GroupContext";
 import { UsersProvider } from "./context/UsersContext";
-import Logout from "./components/Logout";
 
 function App() {
   const [userData, setUserData] = useState(() => {
@@ -35,7 +34,6 @@ function App() {
                 element={<Instructor userData={userData} />}
               />
               <Route path="/admin" element={<Admin userData={userData} />} />
-              <Route path="/userData" element={<Logout />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BrowserRouter>
