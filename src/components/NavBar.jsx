@@ -1,11 +1,6 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function NavBar({ userData }) {
-  const navigate = useNavigate();
-
-  const handleClickUser = function () {
-    navigate("/userData");
-  };
   return (
     <div>
       <nav className="flex justify-between mb-10 cursor-pointer">
@@ -27,14 +22,7 @@ function NavBar({ userData }) {
                   >
                     dashboard
                   </NavLink>
-                  <p
-                    className="cursor-pointer"
-                    onClick={() => {
-                      handleClickUser();
-                    }}
-                  >
-                    {userData.name}
-                  </p>
+                  <p>{userData.name}</p>
                 </div>
               ) : (
                 <NavLink to="/login">Log In</NavLink>
