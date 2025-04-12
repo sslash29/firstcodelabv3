@@ -9,6 +9,7 @@ import Admin from "./pages/Admin";
 import { useState } from "react";
 import { GroupProvider } from "./context/GroupContext";
 import { UsersProvider } from "./context/UsersContext";
+import Test from "./pages/Test";
 
 function App() {
   const [userData, setUserData] = useState(() => {
@@ -34,6 +35,7 @@ function App() {
                 element={<Instructor userData={userData} />}
               />
               <Route path="/admin" element={<Admin userData={userData} />} />
+              <Route path="/test" element={<Test />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BrowserRouter>
