@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
 import supabase from "../../supabase-client";
 import { GroupContext } from "../context/GroupContext";
+import { logEvent } from "../utils/logEvent";
 
-function AddHomework() {
+function AddHomework({ userData }) {
   const { groupList } = useContext(GroupContext); // Get groups from context
   const [homeworkName, setHomeworkName] = useState("");
   const [pdfFile, setPdfFile] = useState(null);
@@ -60,6 +61,7 @@ function AddHomework() {
       return;
     }
 
+    logEvent(`uploaded the pdf file to supabase`, userData.id);
     alert("Homework added successfully!");
     setHomeworkName("");
     setPdfFile(null);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../../supabase-client";
 
-function ShowHomework({ group }) {
+function ShowHomework({ group, userData }) {
   const [homeworks, setHomeworks] = useState([]);
   const [noMatch, setNoMatch] = useState(false);
 

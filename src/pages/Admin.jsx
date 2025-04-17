@@ -7,10 +7,9 @@ import ShowInstructorDetails from "../components/ShowInstructorDetails";
 import ShowUserDetails from "../components/ShowUserDetails"; // ✅ Import ShowUserDetails
 import AddUser from "../components/AddUser";
 import AddUserBtn from "../components/AddUserBtn";
-import { GroupContext } from "../context/GroupContext";
 import Groups from "../components/Groups";
 import ShowGroupData from "../components/ShowGroupData";
-import ShowSessions from "../components/ShowSessions";
+import { logEvent } from "../utils/logEvent";
 
 function Admin({ userData }) {
   const [showInstructorDetails, setShowInstructorDetails] = useState(false);
@@ -25,16 +24,19 @@ function Admin({ userData }) {
   const handleShowInstructorDetails = (instructorDetails) => {
     setShowInstructorDetails(true);
     setSelectedInstructor(instructorDetails);
+    logEvent(`Viewed instructor ${instructorDetails.name}`, userData.id);
   };
 
   const handleShowUserDetails = (userDetails) => {
     setShowUserDetails(true);
     setSelectedUser(userDetails);
+    logEvent(`Viewed user ${userDetails.name}`, userData.id);
   };
 
   const handleShowGroupDetails = (groupDetails) => {
     setIsShowGroup(true);
     setSelectedGroup(groupDetails);
+    logEvent(`Viewed group ${groupDetails.name || groupDetails}`, userData.id);
   };
 
   return (

@@ -1,10 +1,11 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { logEvent } from "../utils/logEvent";
 
-function Logout() {
+function Logout({ userData }) {
   const navigate = useNavigate();
   const handleLogOut = function () {
     localStorage.setItem("userData", "");
+    logEvent(`user has logged out`, userData.id);
     navigate("/login");
   };
 

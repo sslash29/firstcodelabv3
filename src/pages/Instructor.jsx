@@ -7,7 +7,7 @@ import { GroupContext } from "../context/GroupContext";
 import ShowRateUser from "../components/ShowRateUser";
 import { UsersContext } from "../context/UsersContext";
 import AddHomework from "../components/AddHomework";
-
+import { logEvent } from "../utils/logEvent";
 function Instructor({ userData }) {
   const [sessions, setSessions] = useState(userData.sessions || {});
   const [day, setDay] = useState("");
@@ -143,6 +143,11 @@ function Instructor({ userData }) {
       return;
     }
 
+    await logEvent(
+      `Instructor ${userData.name} added session for ${group} on ${day} from ${startTime} to ${endTime}`,
+      userData.id
+    );
+
     // Clear input fields after adding a session
     setDay("");
     setStartTime("");
@@ -180,7 +185,7 @@ function Instructor({ userData }) {
       <DisplaySession daysOfWeek={daysOfWeek} sessions={sessions} />
 
       {/* add homework */}
-      <AddHomework />
+      <AddHomework userData={userData} />
       <ShowRateUser users={studentList} userData={userData} />
     </div>
   );

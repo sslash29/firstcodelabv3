@@ -4,6 +4,7 @@ import ShowHomework from "../components/ShowHomework";
 import ShowRateInstructor from "../components/ShowRateInstructor";
 import { UsersContext } from "../context/UsersContext";
 import ShowSessions from "../components/ShowSessions";
+import { logEvent } from "../utils/logEvent";
 
 function User({ userData }) {
   const courses = userData.courses ? Object.keys(userData.courses) : [];
@@ -12,6 +13,7 @@ function User({ userData }) {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
+    logEvent(`User ${userData.name} visited dashboard`, userData.id);
     if (!setInstructors) {
       console.error(
         "setInstructors is undefined! Make sure it's in GroupContext.Provider."

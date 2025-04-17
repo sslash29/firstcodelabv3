@@ -35,7 +35,10 @@ function App() {
                 element={<Instructor userData={userData} />}
               />
               <Route path="/admin" element={<Admin userData={userData} />} />
-              <Route path="/userData" element={<Logout />} />
+              <Route
+                path="/userData"
+                element={<Logout userData={userData} />}
+              />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BrowserRouter>
