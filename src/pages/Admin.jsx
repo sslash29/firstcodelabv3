@@ -10,6 +10,7 @@ import AddUserBtn from "../components/AddUserBtn";
 import { GroupContext } from "../context/GroupContext";
 import Groups from "../components/Groups";
 import ShowGroupData from "../components/ShowGroupData";
+import ShowSessions from "../components/ShowSessions";
 
 function Admin({ userData }) {
   const [showInstructorDetails, setShowInstructorDetails] = useState(false);

@@ -9,7 +9,7 @@ function ShowSessions({ courses }) {
       const ids = Object.values(courses).map((course) => course.instructor_id);
 
       const { data, error } = await supabase
-        .from("instructors")
+        .from("Instructor")
         .select("id, sessions")
         .in("id", ids);
 
