@@ -107,8 +107,8 @@ function AddHomework({ userData }) {
       >
         <option value="">Select Group</option>
         {groupList.map((group, index) => (
-          <option key={index} value={group}>
-            {group}
+          <option key={index} value={group.name}>
+            {group.name}
           </option>
         ))}
       </select>
