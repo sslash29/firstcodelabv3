@@ -164,22 +164,21 @@ function Instructor({ userData }) {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Instructor: {userData.name}</h2>
-      {/* //   <CreateSession
-    //     filteredGroups={filteredGroups}
-    //     day={day}
-    //     setDay={setDay}
-    //     startTime={startTime}
-    //     setStartTime={setStartTime}
-    //     endTime={endTime}
-    //     setEndTime={setEndTime}
-    //     group={group}
-    //     handleGroupChange={handleGroupChange}
-    //     selectGroup={selectGroup}
-    //     addSession={addSession}
-    //     daysOfWeek={daysOfWeek}
-    //   />
-
-    //   {/* Display Sessions */}
+      <CreateSession
+        filteredGroups={filteredGroups}
+        day={day}
+        setDay={setDay}
+        startTime={startTime}
+        setStartTime={setStartTime}
+        endTime={endTime}
+        setEndTime={setEndTime}
+        group={group}
+        handleGroupChange={handleGroupChange}
+        selectGroup={selectGroup}
+        addSession={addSession}
+        daysOfWeek={daysOfWeek}
+      />
+      {/* Display Sessions */}
       <DisplaySession daysOfWeek={daysOfWeek} sessions={sessions} />
       <AddHomework userData={userData} />
       <ShowRateUser users={studentList} userData={userData} />
