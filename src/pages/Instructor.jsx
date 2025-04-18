@@ -155,12 +155,39 @@ function Instructor({ userData }) {
     setGroup("");
   };
 
-  // Object { id: 1, created_at: "2025-03-02T19:18:04.210147+00:00", name: "mano", password: "mano29", type: "instructor", sessions: {…}, ratings: {…} }
-  // const userDetails = userData ? Object.keys(userData) : [];
-  // const user = [];
-  // userDetails.forEach((user) => {
-  //   const {created_at:_, password:_,}
-  // });
+  const onUpdateSession = async (prevDay, sessionIndex, updated) => {
+    const updatedSessions = { ...sessions };
+
+    // Remove the session from the old day
+    const sessionToUpdate = updatedSessions[prevDay][sessionIndex];
+    updatedSessions[prevDay].splice(sessionIndex, 1);
+
+    // Add it to the new day
+    const newSession = {
+      timeSpan: `${updated.startTime} - ${updated.endTime}`,
+      group: updated.group,
+    };
+
+    if (!Array.isArray(updatedSessions[updated.day])) {
+      updatedSessions[updated.day] = [];
+    }
+    updatedSessions[updated.day].push(newSession);
+
+    // Save to DB
+    const { error } = await supabase
+      .from("Instructor")
+      .update({ sessions: updatedSessions })
+      .eq("id", userData.id);
+
+    if (error) {
+      console.error("Failed to update session:", error);
+      alert("Could not update session!");
+      return;
+    }
+
+    setSessions(updatedSessions);
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Instructor: {userData.name}</h2>
@@ -179,7 +206,11 @@ function Instructor({ userData }) {
         daysOfWeek={daysOfWeek}
       />
       {/* Display Sessions */}
-      <DisplaySession daysOfWeek={daysOfWeek} sessions={sessions} />
+      <DisplaySession
+        daysOfWeek={daysOfWeek}
+        sessions={sessions}
+        onUpdateSession={onUpdateSession}
+      />
       <AddHomework userData={userData} />
       <ShowRateUser users={studentList} userData={userData} />
     </div>
