@@ -19,7 +19,7 @@ function Admin() {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [isAddUser, setIsAddUser] = useState(false);
   const [isShowGroup, setIsShowGroup] = useState(false);
-  const { studentList, instructor, userData } = useContext(UsersContext);
+  const { studentList, instructors, userData } = useContext(UsersContext);
 
   const handleShowInstructorDetails = (instructorDetails) => {
     setShowInstructorDetails(true);
