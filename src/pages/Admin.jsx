@@ -4,7 +4,7 @@ import ShowUsers from "../components/ShowUsers";
 import { UsersContext } from "../context/UsersContext";
 import Messages from "../components/Messages";
 import ShowInstructorDetails from "../components/ShowInstructorDetails";
-import ShowUserDetails from "../components/ShowUserDetails"; // ✅ Import ShowUserDetails
+import ShowUserDetails from "../components/ShowUserDetails";
 import AddUser from "../components/AddUser";
 import AddUserBtn from "../components/AddUserBtn";
 import Groups from "../components/Groups";
