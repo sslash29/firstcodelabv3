@@ -35,7 +35,7 @@ function ShowRateInstructor({ instructors, userData }) {
     const { data: instructorData, error: fetchError } = await supabase
       .from("Instructor")
       .select("ratings")
-      .eq("id", selectedInstructor.instructor_id)
+      .eq("id", selectedInstructor.id)
       .single();
 
     if (fetchError) {
@@ -51,8 +51,7 @@ function ShowRateInstructor({ instructors, userData }) {
     const { data, error } = await supabase
       .from("Instructor")
       .update({ ratings: updatedRatings })
-      .eq("id", selectedInstructor.instructor_id);
-
+      .eq("id", selectedInstructor.id);
     if (error) {
       console.error("Error updating rating:", error);
     } else {
