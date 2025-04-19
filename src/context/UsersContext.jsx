@@ -48,7 +48,8 @@ function UsersProvider({ children }) {
     async function fetchInstructor() {
       const { data, error } = await supabase
         .from("Instructor")
-        .select("id, name, ratings, sessions,password");
+        .select("id, name, ratings, sessions,password")
+        .eq("");
       if (error) {
         console.error("Error fetching instructors:", error);
         return;
