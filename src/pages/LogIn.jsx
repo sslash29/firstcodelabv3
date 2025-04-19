@@ -19,8 +19,7 @@ function LogIn({ setUserData }) {
         .from(table)
         .select("*")
         .eq("name", name)
-        .single();
-
+        .maybeSingle();
       if (queryError) {
         console.error("Query error:", queryError);
         continue; // Move to the next table
@@ -30,6 +29,8 @@ function LogIn({ setUserData }) {
         console.log(`No user found in table: ${table}`);
         continue; // Move to the next table
       }
+
+      console.dir(data);
 
       // Now it's safe to access data.password
       console.log(

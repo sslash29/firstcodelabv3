@@ -202,6 +202,9 @@ function AddUser() {
               <option key={index} value={group} />
             ))}
           </datalist>
+          <p className=" text-sm">
+            if group isn't created, it will be created automatically
+          </p>
         </div>
       )}
 
