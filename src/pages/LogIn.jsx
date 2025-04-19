@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import supabase from "../../supabase-client";
 import { useNavigate } from "react-router-dom";
+import { UsersContext } from "../context/UsersContext";
 
-function LogIn({ setUserData }) {
+function LogIn() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setIsError] = useState("");
   const navigate = useNavigate();
+  const { setUserData } = useContext(UsersContext);
 
   async function checkUser(e) {
     e.preventDefault();

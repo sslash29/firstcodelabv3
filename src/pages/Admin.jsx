@@ -11,7 +11,7 @@ import Groups from "../components/Groups";
 import ShowGroupData from "../components/ShowGroupData";
 import { logEvent } from "../utils/logEvent";
 
-function Admin({ userData }) {
+function Admin() {
   const [showInstructorDetails, setShowInstructorDetails] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -19,7 +19,7 @@ function Admin({ userData }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [isAddUser, setIsAddUser] = useState(false);
   const [isShowGroup, setIsShowGroup] = useState(false);
-  const { studentList, instructors } = useContext(UsersContext);
+  const { studentList, instructor, userData } = useContext(UsersContext);
 
   const handleShowInstructorDetails = (instructorDetails) => {
     setShowInstructorDetails(true);

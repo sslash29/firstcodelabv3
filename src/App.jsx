@@ -6,41 +6,26 @@ import NavBar from "./components/NavBar";
 import User from "./pages/User";
 import Instructor from "./pages/Instructor";
 import Admin from "./pages/Admin";
-import { useState } from "react";
 import { GroupProvider } from "./context/GroupContext";
 import { UsersProvider } from "./context/UsersContext";
 import Logout from "./components/Logout";
 import Test from "./pages/Test";
 
 function App() {
-  const [userData, setUserData] = useState(() => {
-    const storedData = localStorage.getItem("userData");
-    return storedData ? JSON.parse(storedData) : "";
-  });
-
   return (
     <GroupProvider>
       <UsersProvider>
         <div className="p-5">
           <BrowserRouter>
-            <NavBar userData={userData} />
+            <NavBar />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route
-                path="/login"
-                element={<LogIn setUserData={setUserData} />}
-              />
-              <Route path="/user" element={<User userData={userData} />} />
-              <Route
-                path="/instructor"
-                element={<Instructor userData={userData} />}
-              />
-              <Route path="/admin" element={<Admin userData={userData} />} />
+              <Route path="/login" element={<LogIn />} />
+              <Route path="/user" element={<User />} />
+              <Route path="/instructor" element={<Instructor />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="/test" element={<Test />} />
-              <Route
-                path="/userData"
-                element={<Logout userData={userData} />}
-              />
+              <Route path="/userData" element={<Logout />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BrowserRouter>

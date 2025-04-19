@@ -6,10 +6,10 @@ import { UsersContext } from "../context/UsersContext";
 import ShowSessions from "../components/ShowSessions";
 import { logEvent } from "../utils/logEvent";
 
-function User({ userData }) {
+function User() {
+  const { instructors, setInstructors, userData } = useContext(UsersContext);
   const courses = userData.courses ? Object.keys(userData.courses) : [];
   const coursesDetail = userData.courses ? Object.values(userData.courses) : [];
-  const { instructors, setInstructors } = useContext(UsersContext);
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {

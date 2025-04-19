@@ -7,6 +7,11 @@ const UsersContext = createContext(null);
 function UsersProvider({ children }) {
   const [studentList, setStudentList] = useState([]);
   const [instructors, setInstructors] = useState([]);
+  const [userData, setUserData] = useState(() => {
+    const storedData = localStorage.getItem("userData");
+    return storedData ? JSON.parse(storedData) : "";
+  });
+
   const { groupList } = useContext(GroupContext);
 
   useEffect(() => {
@@ -47,9 +52,9 @@ function UsersProvider({ children }) {
     }
     async function fetchInstructor() {
       const { data, error } = await supabase
-        .from("Instructor")
-        .select("id, name, ratings, sessions,password")
-        .eq("");
+        .from("Group_users")
+        .select("id, user_id(*), instructor_id(*)")
+        .eq("user_id", userData.id);
       if (error) {
         console.error("Error fetching instructors:", error);
         return;
@@ -57,15 +62,16 @@ function UsersProvider({ children }) {
 
       if (!data) return;
 
+      console.log(data);
+
       // Map through data and extract name and id
       const formattedInstructors = data.map((ins) => {
-        console.log(ins);
         return {
-          instructor: ins.name,
-          id: ins.id,
-          rating: ins.ratings,
-          session: ins.sessions,
-          password: ins.password,
+          instructor: ins.instructor_id?.name || "Unnamed",
+          id: ins.instructor_id?.id,
+          rating: ins.instructor_id?.ratings,
+          session: ins.instructor_id?.sessions,
+          password: ins.instructor_id?.password,
           additionaldata: ins,
         };
       });
@@ -84,6 +90,8 @@ function UsersProvider({ children }) {
         setStudentList,
         instructors,
         setInstructors,
+        userData,
+        setUserData,
       }}
     >
       {children}

@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { UsersContext } from "../context/UsersContext";
 
-function NavBar({ userData }) {
+function NavBar() {
   const navigate = useNavigate();
-
+  const { userData } = useContext(UsersContext);
   const handleClickUser = function () {
     navigate("/userData");
   };

@@ -8,13 +8,13 @@ import ShowRateUser from "../components/ShowRateUser";
 import { UsersContext } from "../context/UsersContext";
 import AddHomework from "../components/AddHomework";
 import { logEvent } from "../utils/logEvent";
-function Instructor({ userData }) {
+function Instructor() {
   const [sessions, setSessions] = useState(userData.sessions || {});
   const [day, setDay] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [group, setGroup] = useState("");
-  const { studentList } = useContext(UsersContext);
+  const { studentList, userData } = useContext(UsersContext);
 
   const { filteredGroups, setFilteredGroups, setGroupList, groupList } =
     useContext(GroupContext);
