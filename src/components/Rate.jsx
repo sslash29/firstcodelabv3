@@ -10,7 +10,6 @@ function Rate({
   second_column = "Homework/الواجب",
   third_column = "Record/تسجيل",
 }) {
-  const [text, setText] = useState("");
   const handleRatingChange = (category, rating) => {
     setRatings((prev) => ({ ...prev, [category]: rating }));
   };
@@ -49,10 +48,9 @@ function Rate({
       </div>
       <textarea
         placeholder="additional explanation(optional)s "
-        value={text}
+        value={ratings.additionalText}
         onChange={(e) => {
-          setText(e.target.value);
-          handleRatingChange("additionalText", text);
+          handleRatingChange("additionalText", e.target.value);
         }}
       />
       <button
