@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import supabase from "../../supabase-client";
 import { useNavigate } from "react-router-dom";
 import { UsersContext } from "../context/UsersContext";
 
@@ -13,57 +12,25 @@ function LogIn() {
   async function checkUser(e) {
     e.preventDefault();
 
-    let userData = null;
-    const tables = ["Users", "Instructor", "Admin"];
+    const response = await fetch("/api/login", {
+      method: "POST",
+      credentials: "include", // still needed!
+      body: JSON.stringify({ name, password }),
+      headers: { "Content-Type": "application/json" },
+    });
 
-    for (const table of tables) {
-      const { data, error: queryError } = await supabase
-        .from(table)
-        .select("*")
-        .eq("name", name)
-        .maybeSingle();
-      if (queryError) {
-        console.error("Query error:", queryError);
-        continue; // Move to the next table
-      }
-
-      if (!data) {
-        console.log(`No user found in table: ${table}`);
-        continue; // Move to the next table
-      }
-
-      console.dir(data);
-
-      // Now it's safe to access data.password
-      console.log(
-        password,
-        password.length,
-        data.password,
-        data.password.length
-      );
-      console.log(password === data.password);
-
-      if (password === data.password) {
-        userData = data;
-
-        // Save to localStorage
-        localStorage.setItem("userData", JSON.stringify(userData));
-
-        break;
-      }
+    if (response.ok) {
+      const userData = await response.json();
+      // You can now retrieve the token from cookies on the server side
+      // No need to handle the token manually here, as it's stored in a cookie
+      setUserData(userData);
+      // Redirect based on user role
+      if (userData.role === "student") navigate("/user");
+      if (userData.role === "instructor") navigate("/instructor");
+      if (userData.role === "admin") navigate("/admin");
+    } else {
+      setIsError("Invalid credentials");
     }
-
-    if (!userData) {
-      console.log("User not found or incorrect password");
-      setIsError(null);
-      return;
-    }
-
-    setUserData(userData);
-    console.log(userData);
-    if (userData.type.toLowerCase() === "student") navigate("/user");
-    if (userData.type.toLowerCase() === "instructor") navigate("/instructor");
-    if (userData.type.toLowerCase() === "admin") navigate("/admin");
   }
 
   return (
@@ -80,7 +47,7 @@ function LogIn() {
             <input
               type="text"
               className="w-full rounded-lg border px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Enter your email"
+              placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -111,14 +78,9 @@ function LogIn() {
             Login
           </button>
         </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
-          Don't have an account?{" "}
-          <a href="#" className="text-blue-500 hover:underline">
-            Sign up
-          </a>
-        </p>
+
         {error === null && (
-          <p className=" text-red-500 text-center">wrong credentials</p>
+          <p className="text-red-500 text-center">Wrong credentials</p>
         )}
       </div>
     </div>

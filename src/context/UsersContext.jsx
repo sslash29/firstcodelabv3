@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import supabase from "../../supabase-client";
-import { GroupContext } from "./GroupContext";
 
 const UsersContext = createContext(null);
 
@@ -8,14 +7,24 @@ function UsersProvider({ children }) {
   const [studentList, setStudentList] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [allInstructors, setAllInstructors] = useState([]);
-  const [userData, setUserData] = useState(() => {
-    const storedData = localStorage.getItem("userData");
-    return storedData ? JSON.parse(storedData) : "";
-  });
-
-  const { groupList } = useContext(GroupContext);
+  const [userData, setUserData] = useState("");
 
   useEffect(() => {
+    async function fetchUser() {
+      try {
+        const res = await fetch("api/me", {
+          credentials: "include", // 👈 This ensures the cookie is sent
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUserData(data); // Restore user state
+        }
+      } catch (error) {
+        console.error("Not logged in or session expired");
+      }
+    }
+
     async function fetchStudents() {
       const { data, error } = await supabase.from("Users").select("*");
       if (!data || error) {
@@ -23,34 +32,9 @@ function UsersProvider({ children }) {
         return;
       }
 
-      // const uniqueStudents = new Map(); // To track unique users by their ID
-      // const newStudentList = []; // Temporary array to store students
-
-      // data.forEach((student) => {
-      //   const studentDetails = student ? Object.values(student) : [];
-      //   studentDetails.forEach((stuKeys) => {
-      //     if (typeof stuKeys === "object") {
-      //       const courses = stuKeys ? Object.values(stuKeys) : [];
-      //       courses.forEach((course) => {
-      //         if (eqGroup) {
-      //           if (course.group && groupList.includes(course.group)) {
-      //             if (!uniqueStudents.has(student.id)) {
-      //               uniqueStudents.set(student.id, student);
-      //               newStudentList.push(student);
-      //             }
-      //           }
-      //         } else {
-      //           if (!uniqueStudents.has(student.id)) {
-      //             uniqueStudents.set(student.id, student);
-      //             newStudentList.push(student);
-      //           }
-      //         }
-      //       });
-      //     }
-      //   });
-      // });
       setStudentList(data);
     }
+
     async function fetchInstructor() {
       const { data, error } = await supabase
         .from("Group_users")
@@ -87,6 +71,7 @@ function UsersProvider({ children }) {
       console.dir(data);
       setAllInstructors(data);
     }
+    fetchUser();
     fetchAllInstrcutors();
     fetchStudents();
     fetchInstructor();
