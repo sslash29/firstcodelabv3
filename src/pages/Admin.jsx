@@ -19,7 +19,7 @@ function Admin() {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [isAddUser, setIsAddUser] = useState(false);
   const [isShowGroup, setIsShowGroup] = useState(false);
-  const { studentList, instructors, userData } = useContext(UsersContext);
+  const { studentList, allInstructors, userData } = useContext(UsersContext);
 
   const handleShowInstructorDetails = (instructorDetails) => {
     setShowInstructorDetails(true);
@@ -73,7 +73,7 @@ function Admin() {
             <h2 className="text-4xl font-bold">Instructors:</h2>
             <div className="p-2">
               <ShowInstructors
-                instructors={instructors}
+                instructors={allInstructors}
                 setIsAddUser={setIsAddUser}
                 onClickFunc={(ins) => handleShowInstructorDetails(ins)}
               />
@@ -83,7 +83,7 @@ function Admin() {
             <h2 className="text-4xl font-bold">Messages:</h2>
             <div className="p-2">
               <Messages
-                instructors={instructors}
+                instructors={allInstructors}
                 handleShowInstructorDetails={handleShowInstructorDetails}
               />
             </div>

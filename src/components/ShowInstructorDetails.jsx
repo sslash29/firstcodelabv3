@@ -6,13 +6,22 @@ function ShowInstructorDetails({ instructorDetails = {} }) {
     useState(instructorDetails);
   const [isEdit, setIsEdit] = useState(null);
   const [editValues, setEditValues] = useState({
-    name: newInstructorDetails.name || "",
-    password: newInstructorDetails.password || "",
+    name: instructorDetails.name || "",
+    password: instructorDetails.password || "",
   });
 
-  const ratings = newInstructorDetails.rating || {};
-  const sessions = newInstructorDetails.session || {};
+  const ratings = newInstructorDetails.ratings || {};
+  const sessions = newInstructorDetails.sessions || {};
   const [additionalText, setAdditionalText] = useState("");
+
+  // Update state when instructorDetails prop changes
+  useEffect(() => {
+    setNewInstructorDetails(instructorDetails);
+    setEditValues({
+      name: instructorDetails.name || "",
+      password: instructorDetails.password || "",
+    });
+  }, [instructorDetails]);
 
   useEffect(() => {
     if (!instructorDetails.id) return;
@@ -55,10 +64,6 @@ function ShowInstructorDetails({ instructorDetails = {} }) {
 
   const handleCancel = () => {
     setIsEdit(null);
-    setEditValues({
-      name: newInstructorDetails.name || "",
-      password: newInstructorDetails.password || "",
-    });
   };
 
   const handleSubmitEditValues = async () => {
@@ -66,21 +71,21 @@ function ShowInstructorDetails({ instructorDetails = {} }) {
 
     const { data, error } = await supabase
       .from("Instructor")
-      .update({ [isEdit]: editValues[isEdit] }) // Update only the edited field
+      .update({ [isEdit]: editValues[isEdit] })
       .eq("id", newInstructorDetails.id);
 
     if (error) {
-      console.error("Error updating user:", error.message);
+      console.error("Error updating instructor:", error.message);
     } else {
-      console.log("User updated:", data);
-      setIsEdit(null); // Close input after successful update
+      console.log("Instructor updated:", data);
+      setIsEdit(null);
     }
   };
 
   return (
     <div className="flex justify-center">
       <div className="flex flex-col justify-center p-6 font-semibold gap-6 border rounded-lg shadow-lg w-[600px] bg-white">
-        {/* Name Section */}
+        {/* Name */}
         <div>
           <h1 className="font-bold text-3xl text-center text-blue-600">
             {newInstructorDetails.name}
@@ -104,7 +109,7 @@ function ShowInstructorDetails({ instructorDetails = {} }) {
           )}
         </div>
 
-        {/* Password Section */}
+        {/* Password */}
         <div>
           <p className="text-lg text-center text-gray-700">
             Password:
@@ -132,7 +137,7 @@ function ShowInstructorDetails({ instructorDetails = {} }) {
           )}
         </div>
 
-        {/* Ratings Section */}
+        {/* Ratings */}
         <h2 className="text-2xl font-semibold text-center text-gray-800">
           Ratings
         </h2>
@@ -143,30 +148,40 @@ function ShowInstructorDetails({ instructorDetails = {} }) {
               className="flex justify-between p-3 bg-white rounded-lg shadow-md mb-2"
             >
               <span className="font-semibold text-blue-700">{student}</span>
-              <span>Recording📹 {rating.recording}</span>
-              <span>Explanation📖 {rating.explanation}</span>
-              <span>Homework🏠 {rating.homework}</span>
+              <span>📹 {rating.recording}</span>
+              <span>📖 {rating.explanation}</span>
+              <span>🏠 {rating.homework}</span>
               <span className="font-bold text-green-600">
-                overall: {rating.overall}
+                ⭐ {rating.overall}
               </span>
             </div>
           ))}
         </div>
 
-        {/* Additional Data */}
+        {/* Additional Text */}
+        {/* Additional Data Section */}
         <h2 className="text-2xl font-semibold text-center text-gray-800">
           Additional Data
         </h2>
-        <span>{additionalText}</span>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+          {Object.entries(ratings).map(([student, rating], index) => (
+            <div key={index} className="p-3 bg-white rounded-lg shadow-md mb-2">
+              <span className="font-semibold text-blue-700">{student}</span>
+              <p className="text-sm">
+                {rating.additionalText || "No additional data"}
+              </p>
+            </div>
+          ))}
+        </div>
 
-        {/* Sessions Section */}
+        {/* Sessions */}
         <h2 className="text-2xl font-semibold text-center text-gray-800">
           Sessions
         </h2>
         {Object.keys(sessions).length > 0 ? (
           <div className="space-y-4">
             {Object.entries(sessions).map(([day, sessionArray]) =>
-              sessionArray.length > 0 ? (
+              Array.isArray(sessionArray) && sessionArray.length > 0 ? (
                 <div
                   key={day}
                   className="bg-gray-100 p-4 rounded-lg shadow-inner"

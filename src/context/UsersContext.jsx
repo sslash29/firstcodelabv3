@@ -7,6 +7,7 @@ const UsersContext = createContext(null);
 function UsersProvider({ children }) {
   const [studentList, setStudentList] = useState([]);
   const [instructors, setInstructors] = useState([]);
+  const [allInstructors, setAllInstructors] = useState([]);
   const [userData, setUserData] = useState(() => {
     const storedData = localStorage.getItem("userData");
     return storedData ? JSON.parse(storedData) : "";
@@ -79,6 +80,14 @@ function UsersProvider({ children }) {
       setInstructors(formattedInstructors);
     }
 
+    async function fetchAllInstrcutors() {
+      const { data, error } = await supabase.from("Instructor").select("*");
+      if (error)
+        console.error("error occured while fetching all instructors", error);
+      console.dir(data);
+      setAllInstructors(data);
+    }
+    fetchAllInstrcutors();
     fetchStudents();
     fetchInstructor();
   }, []);
@@ -92,6 +101,7 @@ function UsersProvider({ children }) {
         setInstructors,
         userData,
         setUserData,
+        allInstructors,
       }}
     >
       {children}
