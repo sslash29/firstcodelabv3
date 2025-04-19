@@ -10,6 +10,7 @@ import AddUserBtn from "../components/AddUserBtn";
 import Groups from "../components/Groups";
 import ShowGroupData from "../components/ShowGroupData";
 import { logEvent } from "../utils/logEvent";
+import ShowAdmin from "../components/ShowAdmin";
 
 function Admin() {
   const [showInstructorDetails, setShowInstructorDetails] = useState(false);
@@ -40,7 +41,7 @@ function Admin() {
   };
 
   return (
-    <div>
+    <div className="p-4">
       {showInstructorDetails ? (
         <ShowInstructorDetails instructorDetails={selectedInstructor} />
       ) : showUserDetails ? (
@@ -56,10 +57,11 @@ function Admin() {
           setInstrcutorDetails={setSelectedInstructor}
         />
       ) : (
-        <div className="flex justify-between flex-wrap">
-          <div>
-            <h2 className="text-4xl font-bold">Users:</h2>
-            <div className="p-2">
+        <div className="flex flex-wrap gap-8">
+          {/* Users Section */}
+          <div className="flex-1 min-w-[300px]">
+            <h2 className="text-4xl font-bold mb-4">Users:</h2>
+            <div className="p-2 border rounded-lg shadow-sm">
               <ShowUsers
                 users={studentList}
                 onClickFunc={(usr) => handleShowUserDetails(usr)}
@@ -69,9 +71,11 @@ function Admin() {
               />
             </div>
           </div>
-          <div>
-            <h2 className="text-4xl font-bold">Instructors:</h2>
-            <div className="p-2">
+
+          {/* Instructors Section */}
+          <div className="flex-1 min-w-[300px]">
+            <h2 className="text-4xl font-bold mb-4">Instructors:</h2>
+            <div className="p-2 border rounded-lg shadow-sm">
               <ShowInstructors
                 instructors={allInstructors}
                 setIsAddUser={setIsAddUser}
@@ -79,24 +83,33 @@ function Admin() {
               />
             </div>
           </div>
-          <div>
-            <h2 className="text-4xl font-bold">Messages:</h2>
-            <div className="p-2">
+
+          {/* Messages Section */}
+          <div className="flex-1 min-w-[300px]">
+            <h2 className="text-4xl font-bold mb-4">Messages:</h2>
+            <div className="p-2 border rounded-lg shadow-sm">
               <Messages
                 instructors={allInstructors}
                 handleShowInstructorDetails={handleShowInstructorDetails}
               />
             </div>
           </div>
-          <div>
-            <h2 className="text-4xl font-bold">
-              Admin
+
+          {/* Admin Section */}
+          <div className="flex-1 min-w-[300px]">
+            <h2 className="text-4xl font-bold mb-4">Admins:</h2>
+            <div className="p-2 border rounded-lg shadow-sm">
+              <ShowAdmin />
               <AddUserBtn setIsAddUser={setIsAddUser} />
-            </h2>
+            </div>
           </div>
-          <div>
-            <h2 className="text-4xl font-bold">Groups:</h2>
-            <Groups handleShowGroupDetails={handleShowGroupDetails} />
+
+          {/* Groups Section */}
+          <div className="flex-1 min-w-[300px]">
+            <h2 className="text-4xl font-bold mb-4">Groups:</h2>
+            <div className="p-2 border rounded-lg shadow-sm">
+              <Groups handleShowGroupDetails={handleShowGroupDetails} />
+            </div>
           </div>
         </div>
       )}
