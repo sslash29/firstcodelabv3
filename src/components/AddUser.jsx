@@ -9,8 +9,8 @@ function AddUser() {
     type: "Users",
     group: "",
   });
-
   const { groupList } = useContext(GroupContext);
+  const [message, setMessage] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,7 +18,6 @@ function AddUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("📝 Form submitted:", formData);
 
     const tableName =
       formData.type.charAt(0).toUpperCase() + formData.type.slice(1);
@@ -62,12 +61,11 @@ function AddUser() {
       .select(); // to get the new user's ID
 
     if (insertUserError) {
-      console.error("❌ Error inserting user:", insertUserError);
+      setMessage("❌ Error inserting user.");
       return;
     }
 
     const userId = insertUserData?.[0]?.id;
-    console.log("👤 User ID:", userId);
 
     // Check if group already exists
     const { data: existingGroup, error: groupCheckError } = await supabase
@@ -76,47 +74,44 @@ function AddUser() {
       .eq("group_name", formData.group);
 
     if (groupCheckError) {
-      console.error("❌ Error checking group:", groupCheckError);
+      setMessage("❌ Error checking group.");
       return;
     }
 
+    let groupId;
     if (existingGroup.length === 0) {
       const { error: insertGroupError } = await supabase
         .from("Group")
         .insert([{ group_name: formData.group }]);
 
       if (insertGroupError) {
-        console.error("❌ Error inserting group:", insertGroupError);
+        setMessage("❌ Error creating new group.");
         return;
       } else {
-        console.log("✅ Group inserted");
+        groupId = (
+          await supabase
+            .from("Group")
+            .select("id")
+            .eq("group_name", formData.group)
+        )?.data?.[0]?.id;
       }
     } else {
-      console.log("ℹ️ Group already exists");
+      groupId = existingGroup?.[0]?.id;
     }
 
     // Only run extra logic for Users
-    if (formData.type === "Users") {
-      // Get group ID again
-      const { data: groupData, error: groupError } = await supabase
-        .from("Group")
-        .select("id")
-        .eq("group_name", formData.group);
-
-      const groupId = groupData?.[0]?.id;
-      console.log("👥 Group ID:", groupId);
-      console.log(formData.group, typeof formData.group);
+    if (formData.type === "Users" && groupId) {
       // Get instructor whose groups contain this group
       const { data: insData, error: insError } = await supabase
         .from("Instructor")
         .select("id")
         .contains("groups", `{${formData.group}}`);
       const instructorId = insData?.[0]?.id;
-      console.log(`[${formData.group}]`);
-      console.log("👨‍🏫 Instructor ID:", instructorId);
 
-      if (groupError) console.error("❌ Group fetch error:", groupError);
-      if (insError) console.error("❌ Instructor fetch error:", insError);
+      if (insError) {
+        setMessage("❌ Error fetching instructor.");
+        return;
+      }
 
       if (userId && groupId && instructorId) {
         const { error: groupUsersError } = await supabase
@@ -130,91 +125,92 @@ function AddUser() {
           ]);
 
         if (groupUsersError) {
-          console.error(
-            "❌ Error inserting into Group_users:",
-            groupUsersError
-          );
+          setMessage("❌ Error inserting into Group Users.");
         } else {
-          console.log("✅ Group_users inserted successfully!");
+          setMessage("✅ Group users inserted successfully!");
         }
       } else {
-        console.error("❗ Missing one or more IDs:", {
-          userId,
-          groupId,
-          instructorId,
-        });
+        setMessage("❌ Missing IDs for user, group, or instructor.");
       }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded w-80">
-      <div>
-        <label className="block">Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-      </div>
-      <div>
-        <label className="block">Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-      </div>
-      <div>
-        <label className="block">Type:</label>
-        <select
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        >
-          <option value="Users">Users</option>
-          <option value="Instructor">Instructor</option>
-          <option value="Admin">Admin</option>
-        </select>
-      </div>
-
-      {formData.type === "Users" && (
+    <div>
+      <form onSubmit={handleSubmit} className="p-4 border rounded w-80">
         <div>
-          <label className="block">Group:</label>
+          <label className="block">Name:</label>
           <input
             type="text"
-            name="group"
-            value={formData.group}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
-            list="group-options"
             className="border p-2 w-full"
             required
           />
-          <datalist id="group-options">
-            {groupList.map((group, index) => (
-              <option key={index} value={group} />
-            ))}
-          </datalist>
-          <p className=" text-sm">
-            if group isn't created, it will be created automatically
-          </p>
+        </div>
+        <div>
+          <label className="block">Password:</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label className="block">Type:</label>
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          >
+            <option value="Users">Users</option>
+            <option value="Instructor">Instructor</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+
+        {formData.type === "Users" && (
+          <div>
+            <label className="block">Group:</label>
+            <input
+              type="text"
+              name="group"
+              value={formData.group}
+              onChange={handleChange}
+              list="group-options"
+              className="border p-2 w-full"
+              required
+            />
+            <datalist id="group-options">
+              {groupList.map((group, index) => (
+                <option key={index} value={group} />
+              ))}
+            </datalist>
+            <p className=" text-sm">
+              If group isn't created, it will be created automatically.
+            </p>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="mt-4 bg-blue-500 text-white p-2 rounded w-full"
+        >
+          Submit
+        </button>
+      </form>
+
+      {message && (
+        <div className="mt-4 text-center">
+          <p>{message}</p>
         </div>
       )}
-
-      <button
-        type="submit"
-        className="mt-4 bg-blue-500 text-white p-2 rounded w-full"
-      >
-        Submit
-      </button>
-    </form>
+    </div>
   );
 }
 

@@ -4,9 +4,8 @@ function Messages({ instructors, handleShowInstructorDetails }) {
       {
         instructors
           .map((ins) => {
-            // Ensure rating exists and is an object
-
-            const ratings = ins.rating ? Object.values(ins.rating) : [];
+            // Check if the ratings object exists; if not, return an empty array
+            const ratings = ins.ratings ? Object.values(ins.ratings) : [];
 
             // Extract overall ratings separately
             const overallRatings = ratings
@@ -34,14 +33,14 @@ function Messages({ instructors, handleShowInstructorDetails }) {
               return (
                 <div
                   key={ins.id}
-                  className="cursor-pointer"
+                  className="cursor-pointer mb-4 p-2 border-b border-gray-300"
                   onClick={() => {
                     handleShowInstructorDetails(ins);
                   }}
                 >
                   <span className="text-red-500 font-semibold">
                     {ins.name}
-                    {hasLowOverall && <p>overall rating is below 10</p>}
+                    {hasLowOverall && <p>Overall rating is below 10</p>}
                     {hasVeryLowRating && (
                       <p>Some ratings are dangerously low</p>
                     )}

@@ -9,7 +9,6 @@ import { UsersContext } from "../context/UsersContext";
 import AddHomework from "../components/AddHomework";
 import { logEvent } from "../utils/logEvent";
 function Instructor() {
-  const [sessions, setSessions] = useState(userData.sessions || {});
   const [day, setDay] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -18,6 +17,7 @@ function Instructor() {
 
   const { filteredGroups, setFilteredGroups, setGroupList, groupList } =
     useContext(GroupContext);
+  const [sessions, setSessions] = useState(userData.sessions || {});
 
   const daysOfWeek = [
     "Sunday",
