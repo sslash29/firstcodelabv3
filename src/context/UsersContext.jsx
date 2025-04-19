@@ -16,40 +16,40 @@ function UsersProvider({ children }) {
   const { groupList } = useContext(GroupContext);
 
   useEffect(() => {
-    async function fetchStudents(eqGroup) {
+    async function fetchStudents() {
       const { data, error } = await supabase.from("Users").select("*");
       if (!data || error) {
         console.log("Error fetching students:", error);
         return;
       }
 
-      const uniqueStudents = new Map(); // To track unique users by their ID
-      const newStudentList = []; // Temporary array to store students
+      // const uniqueStudents = new Map(); // To track unique users by their ID
+      // const newStudentList = []; // Temporary array to store students
 
-      data.forEach((student) => {
-        const studentDetails = student ? Object.values(student) : [];
-        studentDetails.forEach((stuKeys) => {
-          if (typeof stuKeys === "object") {
-            const courses = stuKeys ? Object.values(stuKeys) : [];
-            courses.forEach((course) => {
-              if (eqGroup) {
-                if (course.group && groupList.includes(course.group)) {
-                  if (!uniqueStudents.has(student.id)) {
-                    uniqueStudents.set(student.id, student);
-                    newStudentList.push(student);
-                  }
-                }
-              } else {
-                if (!uniqueStudents.has(student.id)) {
-                  uniqueStudents.set(student.id, student);
-                  newStudentList.push(student);
-                }
-              }
-            });
-          }
-        });
-      });
-      setStudentList(newStudentList);
+      // data.forEach((student) => {
+      //   const studentDetails = student ? Object.values(student) : [];
+      //   studentDetails.forEach((stuKeys) => {
+      //     if (typeof stuKeys === "object") {
+      //       const courses = stuKeys ? Object.values(stuKeys) : [];
+      //       courses.forEach((course) => {
+      //         if (eqGroup) {
+      //           if (course.group && groupList.includes(course.group)) {
+      //             if (!uniqueStudents.has(student.id)) {
+      //               uniqueStudents.set(student.id, student);
+      //               newStudentList.push(student);
+      //             }
+      //           }
+      //         } else {
+      //           if (!uniqueStudents.has(student.id)) {
+      //             uniqueStudents.set(student.id, student);
+      //             newStudentList.push(student);
+      //           }
+      //         }
+      //       });
+      //     }
+      //   });
+      // });
+      setStudentList(data);
     }
     async function fetchInstructor() {
       const { data, error } = await supabase
