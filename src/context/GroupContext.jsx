@@ -29,17 +29,15 @@ function GroupProvider({ children }) {
 
       console.log("Fetched Data:", data); // Add this line to inspect the data directly
       // Map over the data to extract the group names
-      const uniqueGroups = Array.from(new Set(data.map((group) => group)));
+      const uniqueGroups = Array.from(
+        new Map(data.map((group) => [group.group_id, group])).values()
+      );
       setGroupList(uniqueGroups); // Set the group list without duplicates
       console.log(groupList);
     }
 
     fetchGroups();
-  }, []); // Empty dependency array to run once when the component is mounted
-
-  // if (!mounted) {
-  //   return <div>Loading...</div>; // Render loading state if not yet mounted
-  // }
+  }, []);
 
   return (
     <GroupContext.Provider
