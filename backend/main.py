@@ -19,6 +19,9 @@ supabase: Client = create_client(url, key)
 
 @app.route('/login', methods=['POST'])
 def login():
+    print("Flask Secret:", app.config['SECRET_KEY'])
+    print("Env Secret:", os.getenv("PYTHON_APP_SECRET_KEY"))
+    print("Match?", app.config['SECRET_KEY'] == os.getenv("PYTHON_APP_SECRET_KEY"))
     data = request.get_json()
     name = data.get('name')
     password = data.get('password')
@@ -66,8 +69,6 @@ def get_current_user():
     token = request.cookies.get('token')
     print(f"Token: {token}")  # Add this for debugging
     if not token:
-        cookie = request.cookies.get("token")
-        print(cookie)
         return jsonify({'error': 'Unauthorized'}), 401
 
     try:
